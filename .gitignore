@@ -1,5 +1,8 @@
 build/
 nbproject/
+.idea/
+
 test/
 build.xml
 manifest.mf
+StudentManager.iml
