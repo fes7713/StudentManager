@@ -51,18 +51,9 @@ public class StudentEntry {
         });
 
         //Department Combobox
-        departmentModel = new DefaultComboBoxModel<Department>();
-        ArrayList<Department> departmentList = new ArrayList<Department>(Arrays.asList(
-                new Department("MATH", "Mathematics"),
-                new Department("BIO", "Biology"),
-                new Department("CHEM", "Chemistry"),
-                new Department("CIS", "Computer & Information Sciences"),
-                new Department("MATH", "Mathematics"),
-                new Department("PHY", "Physics"),
-                new Department("EES", "Earth & Environmental Science")
-        ));
+        departmentModel = new DefaultComboBoxModel<>();
         
-        for(Department d :departmentList)
+        for(Department d :TestRepository.getDepartments())
         {
             departmentModel.addElement(d);
         }
@@ -72,21 +63,8 @@ public class StudentEntry {
 
         // Course search list
         searchCourseModel = new DefaultListModel<>();
-         Department cisDepartment = new Department("CIS", "Computer & Information Sciences");
-        ArrayList<Course> courseList = new ArrayList<>(Arrays.asList(
-                new Course(1001, cisDepartment, "Introduction to Academics in Computer Science"),
-                new Course(1051, cisDepartment, "Introduction to Problem Solving and Programming in Python"),
-                new Course(1057, cisDepartment, "Computer Programming in C"),
-                new Course(1068, cisDepartment, "Program Design and Abstraction"),
-                new Course(1166, cisDepartment, "Mathematical Concepts in Computing I"),
-                new Course(2033, cisDepartment, "Computational Probability and Statistics"),
-                new Course(2107, cisDepartment, "Computer Systems and Low-Level Programming"),
-                new Course(2109, cisDepartment, "Database Management Systems"),
-                new Course(2166, cisDepartment, "Mathematical Concepts in Computing II"),
-                new Course(2168, cisDepartment, "Data Structures")
-        ));
         
-        for(Course c: courseList)
+        for(Course c: TestRepository.getCourses())
         {
             searchCourseModel.addElement(c);
         }
