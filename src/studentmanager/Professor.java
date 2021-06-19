@@ -1,5 +1,7 @@
 package studentmanager;
 
 public class Professor {
-    private 
+    private String firstName;
+    private String lastName;
+    private Department department;
 }
