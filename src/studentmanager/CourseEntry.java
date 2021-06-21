@@ -6,6 +6,11 @@
 package studentmanager;
 
 import java.awt.*;
+import java.time.DayOfWeek;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Arrays;
 import javax.swing.*;
 
 /**
@@ -17,7 +22,13 @@ public class CourseEntry extends javax.swing.JPanel {
     /**
      * Creates new form CourseEntry
      */
+    DefaultComboBoxModel<Professor> professorModel;
+    DefaultComboBoxModel<Department> departmentModel;
+    boolean active;
+    
     public CourseEntry() {
+        active = true;
+        
         departmentModel = new DefaultComboBoxModel<>();
         for(Department d :TestRepository.getDepartments())
         {
@@ -31,29 +42,84 @@ public class CourseEntry extends javax.swing.JPanel {
         }
         
         initComponents();
-        
-   
-        
-        
-        
-        
-        
-        
     }
 
     public JPanel getMainPanel() {
         return mainPanel;
     }
 
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
     
-    
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("Course Entry Form");
+    public Course exec()
+    {
+        JFrame frame = new JFrame("Course Entry");
         frame.setSize(new Dimension(500, 300));
-        frame.setContentPane(new CourseEntry().getMainPanel());
+        frame.setContentPane(this.getMainPanel());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
+        while(true)
+        {
+
+            try {
+             Thread.sleep(10);
+            } catch (InterruptedException e) {
+            }
+            if(!isActive())
+            {
+                if(courseNumEntry.getText().isEmpty())
+                {
+                    JOptionPane.showMessageDialog(null, "Empty Course Number is not allowed");
+                    setActive(true);
+                }
+                else{
+                    break;
+                }
+                
+            }
+        }
+        frame.dispose();
+        java.util.List<DayOfWeek> days = new ArrayList<>();
+        
+        if(sunRadio.isSelected())
+            days.add(DayOfWeek.SUNDAY);
+        if(monRadio.isSelected())
+            days.add(DayOfWeek.MONDAY);
+        if(tueRadio.isSelected())
+            days.add(DayOfWeek.TUESDAY);
+        if(wedRadio.isSelected())
+            days.add(DayOfWeek.WEDNESDAY);
+        if(thuRadio.isSelected())
+            days.add(DayOfWeek.THURSDAY);
+        if(friRadio.isSelected())
+            days.add(DayOfWeek.FRIDAY);
+        if(satRadio.isSelected())
+            days.add(DayOfWeek.SATURDAY);
+        
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("KK:mm:a");
+
+        Schedule schedule = new Schedule(
+                new ArrayList<>(Arrays.asList(DayOfWeek.MONDAY, DayOfWeek.WEDNESDAY, DayOfWeek.FRIDAY)),
+                LocalTime.parse("10:20:AM", format),
+                LocalTime.parse("11:50:AM", format)
+        );
+        
+        return new Course((Department)departmentCmbbox.getSelectedItem(), 
+            new Integer(courseNumEntry.getValue().toString()), 
+            titleEntry.getText(),
+            (Professor)professorCmbbox.getSelectedItem(),
+            new Schedule(days, LocalTime.parse((String)timeStartHourCmb.getSelectedItem() + ":" + 
+                                                (String)timeStartMinuteCmb.getSelectedItem() + ":" + 
+                                                (String)timeStartAMPM.getSelectedItem(), format), 
+                                LocalTime.parse((String)timeEndHourCmb.getSelectedItem() + ":" + 
+                                                (String)timeEndMinuteCmb.getSelectedItem() + ":" + 
+                                                (String)timeEndAMPM.getSelectedItem(), format)));
     }
 
     /**
@@ -71,7 +137,6 @@ public class CourseEntry extends javax.swing.JPanel {
         departmentLabel = new javax.swing.JLabel();
         courseNumLabel = new javax.swing.JLabel();
         departmentCmbbox = new javax.swing.JComboBox<>();
-        courseNumEntry = new javax.swing.JTextField();
         titleLabel = new javax.swing.JLabel();
         titleEntry = new javax.swing.JTextField();
         daysLabel = new javax.swing.JLabel();
@@ -102,6 +167,7 @@ public class CourseEntry extends javax.swing.JPanel {
         timeStartHourCmb = new javax.swing.JComboBox<>();
         jLabel15 = new javax.swing.JLabel();
         timeStartMinuteCmb = new javax.swing.JComboBox<>();
+        courseNumEntry = new javax.swing.JFormattedTextField();
 
         javax.swing.GroupLayout jFrame1Layout = new javax.swing.GroupLayout(jFrame1.getContentPane());
         jFrame1.getContentPane().setLayout(jFrame1Layout);
@@ -127,13 +193,6 @@ public class CourseEntry extends javax.swing.JPanel {
         departmentCmbbox.setFont(new java.awt.Font("MS UI Gothic", 0, 14)); // NOI18N
         departmentCmbbox.setModel(departmentModel);
         departmentCmbbox.setSelectedItem(departmentModel);
-
-        courseNumEntry.setFont(new java.awt.Font("MS UI Gothic", 0, 14)); // NOI18N
-        courseNumEntry.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                courseNumEntryActionPerformed(evt);
-            }
-        });
 
         titleLabel.setFont(new java.awt.Font("MS UI Gothic", 0, 14)); // NOI18N
         titleLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
@@ -304,7 +363,7 @@ public class CourseEntry extends javax.swing.JPanel {
         timeStartLabel.setText("Start");
 
         timeEndHourCmb.setFont(new java.awt.Font("MS UI Gothic", 0, 14)); // NOI18N
-        timeEndHourCmb.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", " " }));
+        timeEndHourCmb.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", " " }));
         timeEndHourCmb.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 timeEndHourCmbActionPerformed(evt);
@@ -323,7 +382,7 @@ public class CourseEntry extends javax.swing.JPanel {
         });
 
         timeStartHourCmb.setFont(new java.awt.Font("MS UI Gothic", 0, 14)); // NOI18N
-        timeStartHourCmb.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", " " }));
+        timeStartHourCmb.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", " " }));
         timeStartHourCmb.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 timeStartHourCmbActionPerformed(evt);
@@ -390,6 +449,13 @@ public class CourseEntry extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        courseNumEntry.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(java.text.NumberFormat.getIntegerInstance())));
+        courseNumEntry.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                courseNumEntryActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
         mainPanel.setLayout(mainPanelLayout);
         mainPanelLayout.setHorizontalGroup(
@@ -431,12 +497,12 @@ public class CourseEntry extends javax.swing.JPanel {
                             .addComponent(departmentLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(30, 30, 30)
                         .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(courseNumEntry)
                             .addGroup(mainPanelLayout.createSequentialGroup()
                                 .addComponent(departmentCmbbox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(departmentAddButton))
-                            .addComponent(titleEntry, javax.swing.GroupLayout.Alignment.LEADING))
+                            .addComponent(titleEntry, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(courseNumEntry))
                         .addGap(12, 12, 12))))
         );
         mainPanelLayout.setVerticalGroup(
@@ -449,8 +515,8 @@ public class CourseEntry extends javax.swing.JPanel {
                     .addComponent(departmentAddButton, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(courseNumEntry, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(courseNumLabel))
+                    .addComponent(courseNumLabel)
+                    .addComponent(courseNumEntry, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(titleEntry, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -549,8 +615,7 @@ public class CourseEntry extends javax.swing.JPanel {
 
     private void submitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitButtonActionPerformed
         // TODO add your handling code here:
-        JOptionPane.showMessageDialog(null, "First Name :");
-            
+        setActive(false);
     }//GEN-LAST:event_submitButtonActionPerformed
 
     private void departmentAddButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_departmentAddButtonActionPerformed
@@ -575,7 +640,7 @@ public class CourseEntry extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField courseNumEntry;
+    private javax.swing.JFormattedTextField courseNumEntry;
     private javax.swing.JLabel courseNumLabel;
     private javax.swing.JLabel daysLabel;
     private javax.swing.JPanel daysRadioPanel;
@@ -613,7 +678,5 @@ public class CourseEntry extends javax.swing.JPanel {
     private javax.swing.JRadioButton tueRadio;
     private javax.swing.JRadioButton wedRadio;
     // End of variables declaration//GEN-END:variables
-    DefaultComboBoxModel<Professor> professorModel;
-    DefaultComboBoxModel<Department> departmentModel;
 
 }

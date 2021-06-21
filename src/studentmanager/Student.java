@@ -1,5 +1,7 @@
 package studentmanager;
 
+import java.util.List;
+
 /*
         TU id						Int		Primary key
 		Name
@@ -15,13 +17,15 @@ public class Student {
     private String lastName;
     private String major;
     private Department department;
+    List<Course> courseTaking;
 
-    public Student(int TU_id, String firstName, String lastName, String major, Department department) {
+    public Student(int TU_id, String firstName, String lastName, String major, Department department, List<Course> courses) {
         this.TU_id = TU_id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.major = major;
         this.department = department;
+        courseTaking = courses;
     }
 
     public int getTU_id() {
@@ -64,8 +68,18 @@ public class Student {
         this.department = department;
     }
 
-    public static void exec()
-    {
-
+    public List<Course> getCourseTaking() {
+        return courseTaking;
     }
+
+    public void setCourseTaking(List<Course> courseTaking) {
+        this.courseTaking = courseTaking;
+    }
+
+    @Override
+    public String toString() {
+        return "Student{" + "TU_id=" + TU_id + ", firstName=" + firstName + ", lastName=" + lastName + ", major=" + major + ", department=" + department + ", courseTaking=" + courseTaking + '}';
+    }
+    
+    
 }

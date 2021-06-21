@@ -15,7 +15,17 @@ public class StudentManager {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        // Testing course Entry
+        CourseEntry courseEntry = new CourseEntry();
+        Course course = courseEntry.exec();
+         System.out.println(course.toFullString());
+       
+         // Testing Student Entry
+        StudentEntry studentEntry = new StudentEntry();
+        Student student = studentEntry.exec();
+        System.out.println(student);
     }
+    
+    
     
 }

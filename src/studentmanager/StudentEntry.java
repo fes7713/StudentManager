@@ -4,13 +4,16 @@ import javax.swing.*;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.text.StyleContext;
 import java.awt.*;
+import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
+import javax.swing.text.NumberFormatter;
 
-public class StudentEntry {
+public class StudentEntry{
     private JButton removeButton;
     private JPanel panel1;
     private JTextField firstNameEntry;
@@ -27,7 +30,7 @@ public class StudentEntry {
     private JButton removeAllButton;
     private JLabel seachCourseLabel;
     private JLabel studentCourseLabel;
-    private JTextField tuidEntry;
+    private JFormattedTextField tuidEntry;
     private JComboBox<Department> departmentCmb;
     private JLabel departmentLabel;
     private JLabel tuidLabel;
@@ -38,18 +41,26 @@ public class StudentEntry {
     private DefaultListModel<Course> searchCourseModel;
     private DefaultListModel<Course> studentCourseModel;
     private DefaultComboBoxModel<Department> departmentModel;
+    private boolean active;
 
     public StudentEntry() {
+        active = true;
+        
+//         ok button behavior. by pressing this, window should close (WIP)
         okButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, "First Name :" + firstNameEntry.getText() + "\n" +
-                        "Last Name :" + lastNameEntry.getText());
-                firstNameEntry.setText("");
-                lastNameEntry.setText("");
+//                JOptionPane.showMessageDialog(null, "First Name :" + firstNameEntry.getText() + "\n" +
+//                        "Last Name :" + lastNameEntry.getText());
+//                firstNameEntry.setText("");
+//                lastNameEntry.setText("");
+                System.out.println(active);
+                setActive(false);
+                
             }
         });
-
+        
+        
         //Department Combobox
         departmentModel = new DefaultComboBoxModel<>();
         
@@ -75,7 +86,7 @@ public class StudentEntry {
 
         // Student course List
         studentCourseModel = new DefaultListModel<>();
-        studentCourseList = new JList<>(studentCourseModel);
+        studentCourseList = new JList<Course>(studentCourseModel);
         studentCoursePane.getViewport().setView(studentCourseList);
 
         // Add button behavior
@@ -118,6 +129,7 @@ public class StudentEntry {
             }
         });
 
+        // remove button behaviour
         removeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -141,6 +153,8 @@ public class StudentEntry {
                 }
             }
         });
+        
+        // Remove all button behavior
         removeAllButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -154,19 +168,59 @@ public class StudentEntry {
             }
         });
     }
+   
 
     public JPanel getPanel1() {
         return panel1;
     }
-
-    public static void main(String[] args) {
-        StudentEntry studentEntry = new StudentEntry();
+    
+    public boolean isActive()
+    {
+        return active;
+    }
+    
+    public void setActive(boolean active)
+    {
+        this.active = active;
+    }
+    
+    public Student exec()
+    {
         JFrame frame = new JFrame("Student Database Manager");
         frame.setSize(new Dimension(500, 300));
-        frame.setContentPane(new StudentEntry().getPanel1());
+        frame.setContentPane(this.getPanel1());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
+        while(true)
+        {
+            try {
+             Thread.sleep(10);
+            } catch (InterruptedException e) {
+            }
+            
+            if(!isActive())
+            {
+                if(tuidEntry.getText().isEmpty())
+                {
+                    JOptionPane.showMessageDialog(null, "Empty TU ID is not allowed");
+                    setActive(true);
+                }
+                else{
+                    break;
+                }
+            }
+        }
+        frame.dispose();
+        System.out.println("Ended");
+        java.util.List<Course> courseList = new ArrayList<>();
+        int maxIndex = studentCourseModel.getSize();
+        for(int i = 0; i < maxIndex; i++)
+        {
+            courseList.add(studentCourseModel.getElementAt(i));
+        }
+        
+        return new Student(new Integer(tuidEntry.getValue().toString()), firstNameEntry.getText(), lastNameEntry.getText(), majorEntry.getText(), (Department)departmentCmb.getSelectedItem(), courseList);
     }
 
     {
@@ -363,8 +417,16 @@ public class StudentEntry {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(0, 20, 0, 0);
         panel1.add(okButton, gbc);
-        tuidEntry = new JTextField();
+        
+        // Accept only numbers here
+        NumberFormat longFormat = NumberFormat.getIntegerInstance();
+        NumberFormatter numberFormatter = new NumberFormatter(longFormat);
+        numberFormatter.setValueClass(Integer.class); //optional, ensures you will always get a long value
+//        numberFormatter.setAllowsInvalid(false); //this is the key!!
+//        numberFormatter.setMinimum(0l); //Optional
+        tuidEntry = new JFormattedTextField(numberFormatter);
         tuidEntry.setPreferredSize(new Dimension(250, 30));
+        
         gbc = new GridBagConstraints();
         gbc.gridx = 2;
         gbc.gridy = 1;
@@ -464,5 +526,7 @@ public class StudentEntry {
     public JComponent $$$getRootComponent$$$() {
         return panel1;
     }
+
+    
 
 }
