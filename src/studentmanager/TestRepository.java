@@ -1,12 +1,31 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+// INSTRUCTION :
+//      ****This is Test Repository Class****
+
+// Use this to test your form until MySQL team makes database for this project.
+// There are two type of methods in this class
+// 1) Static methods with default values, which returns the same sets of values
+//      == this does not provide add option.
+// 2) Class methods with default values, where you can change inside data in runtime
+//      == this provides add option so if you implement add option use this.
+
+// Use static method for the first testing and later change it to class method.
+
+// How to call methods.
+// Static methods
+//      TestRepository.getProfessors()
+// Class methods
+//      TestRepository repo = new TestRepository()
+//      List<Course> courses = repo.getCourse
+
+// No "s" in class methods
+
+
 package studentmanager;
 
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  *
@@ -16,6 +35,7 @@ public class TestRepository {
     private ArrayList<Department> departmentList;
     private ArrayList<Course> courseList;
     private ArrayList<Professor> professorList;
+    private ArrayList<Semester> semesterList;
     
     public TestRepository()
     {
@@ -53,18 +73,30 @@ public class TestRepository {
                 new Professor("Janella", "Rosamond", departmentList.get(0));
                 new Professor("Harleigh", "Genette", departmentList.get(6));
                 new Professor("Fred", "Thurstan", departmentList.get(0));
+                
+        semesterList = new ArrayList<>(Arrays.asList(
+                new Semester(Season.SPRING, Year.of(2019)),
+                new Semester(Season.SUMMER, Year.of(2019)),
+                new Semester(Season.FALL, Year.of(2019)),
+                new Semester(Season.SPRING, Year.of(2020)),
+                new Semester(Season.SUMMER, Year.of(2020)),
+                new Semester(Season.FALL, Year.of(2020))));
     }
 
-    public ArrayList<Department> getDepartment() {
+    public List<Department> getDepartment() {
         return departmentList;
     }
 
-    public ArrayList<Course> getCourse() {
+    public List<Course> getCourse() {
         return courseList;
     }
 
-    public ArrayList<Professor> getProfessor() {
+    public List<Professor> getProfessor() {
         return professorList;
+    }
+
+    public List<Semester> getSemester() {
+        return semesterList;
     }
     
     public void addDepartment(Department dept)
@@ -82,8 +114,14 @@ public class TestRepository {
         professorList.add(prof);
     }
     
-    public static ArrayList<Department> getDepartments() {
-        return new ArrayList<Department>(Arrays.asList(
+    public void addSemester(Semester sem)
+    {
+        semesterList.add(sem);
+    }
+    
+    // Returns default values
+    public static List<Department> getDepartments() {
+        return new ArrayList<>(Arrays.asList(
                 new Department("MATH", "Mathematics"),
                 new Department("BIO", "Biology"),
                 new Department("CHEM", "Chemistry"),
@@ -94,7 +132,7 @@ public class TestRepository {
         ));
     }
 
-    public static ArrayList<Course> getCourses() {
+    public static List<Course> getCourses() {
         Department cisDepartment = new Department("CIS", "Computer & Information Sciences");
         return new ArrayList<>(Arrays.asList(
                 new Course(cisDepartment, 1001, "Introduction to Academics in Computer Science"),
@@ -110,7 +148,7 @@ public class TestRepository {
         ));
     }
 
-    public static ArrayList<Professor> getProfessors() {
+    public static List<Professor> getProfessors() {
         Department cisDepartment = new Department("CIS", "Computer & Information Sciences");
         return new ArrayList<>(Arrays.asList(
                 new Professor("Spartak", "Gurgen", cisDepartment),
@@ -122,6 +160,17 @@ public class TestRepository {
                 new Professor("Janella", "Rosamond", cisDepartment),
                 new Professor("Harleigh", "Genette", cisDepartment),
                 new Professor("Fred", "Thurstan", cisDepartment)));
+    }
+    
+    public static List<Semester> getSemesters()
+    {
+        return new ArrayList<>(Arrays.asList(
+                new Semester(Season.SPRING, Year.of(2019)),
+                new Semester(Season.SUMMER, Year.of(2019)),
+                new Semester(Season.FALL, Year.of(2019)),
+                new Semester(Season.SPRING, Year.of(2020)),
+                new Semester(Season.SUMMER, Year.of(2020)),
+                new Semester(Season.FALL, Year.of(2020))));
     }
     
     

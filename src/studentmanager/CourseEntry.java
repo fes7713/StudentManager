@@ -24,6 +24,7 @@ public class CourseEntry extends javax.swing.JPanel {
      */
     DefaultComboBoxModel<Professor> professorModel;
     DefaultComboBoxModel<Department> departmentModel;
+    DefaultComboBoxModel<Semester> semesterModel;
     boolean active;
     
     public CourseEntry() {
@@ -39,6 +40,12 @@ public class CourseEntry extends javax.swing.JPanel {
         for(Professor f : TestRepository.getProfessors())
         {
             professorModel.addElement(f);
+        }
+        
+        semesterModel = new DefaultComboBoxModel<>();
+        for(Semester s : TestRepository.getSemesters())
+        {
+            semesterModel.addElement(s);
         }
         
         initComponents();
@@ -102,24 +109,18 @@ public class CourseEntry extends javax.swing.JPanel {
         if(satRadio.isSelected())
             days.add(DayOfWeek.SATURDAY);
         
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("KK:mm:a");
-
-        Schedule schedule = new Schedule(
-                new ArrayList<>(Arrays.asList(DayOfWeek.MONDAY, DayOfWeek.WEDNESDAY, DayOfWeek.FRIDAY)),
-                LocalTime.parse("10:20:AM", format),
-                LocalTime.parse("11:50:AM", format)
-        );
         
         return new Course((Department)departmentCmbbox.getSelectedItem(), 
             new Integer(courseNumEntry.getValue().toString()), 
             titleEntry.getText(),
-            (Professor)professorCmbbox.getSelectedItem(),
-            new Schedule(days, LocalTime.parse((String)timeStartHourCmb.getSelectedItem() + ":" + 
-                                                (String)timeStartMinuteCmb.getSelectedItem() + ":" + 
-                                                (String)timeStartAMPM.getSelectedItem(), format), 
-                                LocalTime.parse((String)timeEndHourCmb.getSelectedItem() + ":" + 
-                                                (String)timeEndMinuteCmb.getSelectedItem() + ":" + 
-                                                (String)timeEndAMPM.getSelectedItem(), format)));
+            professorCmbbox.getItemAt(professorCmbbox.getSelectedIndex()),
+            semesterCmbbox.getItemAt(semesterCmbbox.getSelectedIndex()),
+            new Schedule(days, (String)timeStartHourCmb.getSelectedItem(), 
+                    (String)timeStartMinuteCmb.getSelectedItem(), 
+                    (String)timeStartAMPM.getSelectedItem(),  
+                    (String)timeEndHourCmb.getSelectedItem(),
+                    (String)timeEndMinuteCmb.getSelectedItem(),
+                    (String)timeEndAMPM.getSelectedItem()));
     }
 
     /**
@@ -222,7 +223,7 @@ public class CourseEntry extends javax.swing.JPanel {
         semesterLabel.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
 
         semesterCmbbox.setFont(new java.awt.Font("MS UI Gothic", 0, 14)); // NOI18N
-        semesterCmbbox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        semesterCmbbox.setModel(semesterModel);
 
         semesterAddButton.setText("+");
         semesterAddButton.addActionListener(new java.awt.event.ActionListener() {
@@ -658,7 +659,7 @@ public class CourseEntry extends javax.swing.JPanel {
     private javax.swing.JLabel professorLabel;
     private javax.swing.JRadioButton satRadio;
     private javax.swing.JButton semesterAddButton;
-    private javax.swing.JComboBox<String> semesterCmbbox;
+    private javax.swing.JComboBox<Semester> semesterCmbbox;
     private javax.swing.JLabel semesterLabel;
     private javax.swing.JButton submitButton;
     private javax.swing.JRadioButton sunRadio;

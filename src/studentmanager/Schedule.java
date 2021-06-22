@@ -20,19 +20,21 @@ public class Schedule {
     private List<DayOfWeek> days;
     LocalTime startTime;
     LocalTime endTime;
-//    DayOfWeek[] days = { 
-//    DayOfWeek.Sunday, 
-//    DayOfWeek.Monday, 
-//    DayOfWeek.Tuesday, 
-//    DayOfWeek.Wednesday, 
-//    DayOfWeek.Thursday, 
-//    DayOfWeek.Friday, 
-//    DayOfWeek.Saturday };
 
     public Schedule(List<DayOfWeek> days, LocalTime startTime, LocalTime endTime) {
         this.days = days;
         this.startTime = startTime;
         this.endTime = endTime;
+    }
+    
+    public Schedule(List<DayOfWeek> days, String startHour, String startMinute, String startAMPM, 
+                    String endHour, String endMinute, String endAMPM)
+    {
+        this.days = days;
+        
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("KK:mm:a");
+        this.startTime = LocalTime.parse(startHour + ":" + startMinute + ":" + startAMPM, format); 
+        this.endTime = LocalTime.parse(endHour + ":" + endMinute + ":" + endAMPM, format);
     }
 
     public List<DayOfWeek> getDays() {
