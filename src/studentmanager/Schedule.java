@@ -64,28 +64,4 @@ public class Schedule {
         return "Schedule{" + "days=" + days + ", startTime=" + startTime.format(DateTimeFormatter.ofPattern("KK:mm:ss:a")) + 
                 ", endTime=" + endTime.format(DateTimeFormatter.ofPattern("KK:mm:ss:a")) + '}';
     }
-    
-    
-    public static void main(String[] args)
-    {
-        DateTimeFormatter csvFormat = DateTimeFormatter.ofPattern("KK:mm:a");
-
-        String time2 = "07:30:PM"; //○;
-
-        LocalTime  d1 = LocalTime.parse(time2, csvFormat);
-        LocalTime  d2 = LocalTime.parse(time2, csvFormat);
- 
-        System.out.println(d2.format(DateTimeFormatter.ofPattern("HH:mm")));
-        
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("KK:mm:a");
-
-        Schedule schedule = new Schedule(
-                new ArrayList<>(Arrays.asList(DayOfWeek.MONDAY, DayOfWeek.WEDNESDAY, DayOfWeek.FRIDAY)),
-                LocalTime.parse("10:20:AM", format),
-                LocalTime.parse("11:50:AM", format)
-        );
-        
-        System.out.println(schedule);
-
-    }
 }
