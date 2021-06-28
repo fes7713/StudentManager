@@ -45,16 +45,16 @@ public class Schedule {
         this.days = days;
     }
 
-    public LocalTime getStartTime() {
-        return startTime;
+    public String getStartTime() {
+        return startTime.format(DateTimeFormatter.ofPattern("hh:mm:ss"));
     }
 
     public void setStartTime(LocalTime startTime) {
         this.startTime = startTime;
     }
 
-    public LocalTime getEndTime() {
-        return endTime;
+    public String getEndTime() {
+        return endTime.format(DateTimeFormatter.ofPattern("hh:mm:ss"));
     }
 
     public void setEndTime(LocalTime endTime) {
@@ -65,5 +65,19 @@ public class Schedule {
     public String toString() {
         return "Schedule{" + "days=" + days + ", startTime=" + startTime.format(DateTimeFormatter.ofPattern("KK:mm:ss:a")) + 
                 ", endTime=" + endTime.format(DateTimeFormatter.ofPattern("KK:mm:ss:a")) + '}';
+    }
+    
+    public static void main(String[] args)
+    {
+        List<DayOfWeek> days = Arrays.asList(DayOfWeek.TUESDAY);
+        Schedule schedule = new Schedule(days, String.valueOf(11), 
+                    String.valueOf(11),  
+                    "AM",
+                    String.valueOf(11),
+                    String.valueOf(12),
+                    "AM");
+        
+        System.out.println(schedule.toString());
+        System.out.println(schedule.getEndTime());
     }
 }

@@ -31,12 +31,6 @@ public class Semester {
     public String toString() {
         return season + " " + year;
     }
-    
-    public static void main(String[] args)
-    {
-        Semester semester = new Semester(Season.SPRING, Year.of(2019));
-        System.out.println(semester);
-    }
 }
 
 enum Season{

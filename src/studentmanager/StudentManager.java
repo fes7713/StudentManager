@@ -16,6 +16,11 @@ public class StudentManager {
      */
     public static void main(String[] args) {
         // Testing course Entry
+        DepartmentEntry departmentEntry = new DepartmentEntry();
+        Department department = departmentEntry.exec();
+         System.out.println(department);
+         
+        // Testing course Entry
         CourseEntry courseEntry = new CourseEntry();
         Course course = courseEntry.exec();
          System.out.println(course.toFullString());
