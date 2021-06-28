@@ -1,4 +1,4 @@
-package studentmanager;
+package studentmanager.JavaClasses;
 
 /*
 Department id (CIS) 				String		Primary key

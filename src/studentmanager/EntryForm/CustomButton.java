@@ -1,4 +1,4 @@
-package studentmanager;
+package studentmanager.EntryForm;
 
 import javax.swing.*;
 import java.awt.*;

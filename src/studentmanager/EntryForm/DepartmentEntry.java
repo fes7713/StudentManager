@@ -3,8 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package studentmanager;
+package studentmanager.EntryForm;
 
+import studentmanager.JavaClasses.Department;
+import studentmanager.JavaClasses.Course;
 import java.awt.Dimension;
 import java.util.ArrayList;
 import javax.swing.JFrame;

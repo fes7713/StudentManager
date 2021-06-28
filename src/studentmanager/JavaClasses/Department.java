@@ -1,4 +1,4 @@
-package studentmanager;
+package studentmanager.JavaClasses;
 
 public class Department {
     private String departmentID;

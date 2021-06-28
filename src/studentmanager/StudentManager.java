@@ -5,6 +5,13 @@
  */
 package studentmanager;
 
+import studentmanager.EntryForm.CourseEntry;
+import studentmanager.EntryForm.DepartmentEntry;
+import studentmanager.EntryForm.StudentEntry;
+import studentmanager.JavaClasses.Student;
+import studentmanager.JavaClasses.Department;
+import studentmanager.JavaClasses.Course;
+
 /**
  *
  * @author fes77

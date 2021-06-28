@@ -20,8 +20,13 @@
 // No "s" in class methods
 
 
-package studentmanager;
+package Repository;
 
+import studentmanager.JavaClasses.Department;
+import studentmanager.JavaClasses.Course;
+import studentmanager.JavaClasses.Semester;
+import studentmanager.JavaClasses.Professor;
+import studentmanager.JavaClasses.Season;
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.Arrays;

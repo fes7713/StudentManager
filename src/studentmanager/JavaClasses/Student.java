@@ -1,4 +1,4 @@
-package studentmanager;
+package studentmanager.JavaClasses;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package studentmanager;
+package studentmanager.JavaClasses;
 
 public class Professor {
     private String firstName;

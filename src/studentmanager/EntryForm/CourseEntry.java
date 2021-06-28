@@ -3,8 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package studentmanager;
+package studentmanager.EntryForm;
 
+import studentmanager.JavaClasses.Department;
+import studentmanager.JavaClasses.Course;
+import studentmanager.JavaClasses.Semester;
+import studentmanager.JavaClasses.Schedule;
+import studentmanager.JavaClasses.Professor;
 import java.awt.*;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
@@ -12,6 +17,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import javax.swing.*;
+import Repository.TestRepository;
 
 /**
  *

@@ -1,5 +1,8 @@
-package studentmanager;
+package studentmanager.EntryForm;
 
+import studentmanager.JavaClasses.Student;
+import studentmanager.JavaClasses.Department;
+import studentmanager.JavaClasses.Course;
 import javax.swing.*;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.text.StyleContext;
@@ -12,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
 import javax.swing.text.NumberFormatter;
+import Repository.TestRepository;
 
 public class StudentEntry{
     private JButton removeButton;

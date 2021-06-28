@@ -1,4 +1,4 @@
-package studentmanager;
+package studentmanager.JavaClasses;
 
 import java.time.Year;
 
@@ -31,20 +31,4 @@ public class Semester {
     public String toString() {
         return season + " " + year;
     }
-}
-
-enum Season{
-    SPRING,
-    SUMMER,
-    FALL;
-    
-    @Override
-    public String toString() {
-        switch(this) {
-            case SPRING:    return "Spring";
-            case SUMMER:    return "Summer";
-            case FALL:      return "Fall";
-            default: throw new IllegalArgumentException();
-    }
-  }
 }
