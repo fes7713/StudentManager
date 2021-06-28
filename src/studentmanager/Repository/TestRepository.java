@@ -20,7 +20,7 @@
 // No "s" in class methods
 
 
-package Repository;
+package studentmanager.Repository;
 
 import studentmanager.JavaClasses.Department;
 import studentmanager.JavaClasses.Course;

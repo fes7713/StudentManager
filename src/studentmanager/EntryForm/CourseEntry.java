@@ -17,7 +17,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import javax.swing.*;
-import Repository.TestRepository;
+import studentmanager.Repository.TestRepository;
 
 /**
  *

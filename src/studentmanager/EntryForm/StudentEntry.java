@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
 import javax.swing.text.NumberFormatter;
-import Repository.TestRepository;
+import studentmanager.Repository.TestRepository;
 
 public class StudentEntry{
     private JButton removeButton;
