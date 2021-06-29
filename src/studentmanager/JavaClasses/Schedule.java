@@ -21,6 +21,9 @@ public class Schedule {
     LocalTime startTime;
     LocalTime endTime;
 
+    public Schedule(){
+    }
+    
     public Schedule(List<DayOfWeek> days, LocalTime startTime, LocalTime endTime) {
         this.days = days;
         this.startTime = startTime;

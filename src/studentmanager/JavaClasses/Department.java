@@ -1,9 +1,21 @@
 package studentmanager.JavaClasses;
 
+import studentmanager.Repository.MySQL;
+
 public class Department {
     private String departmentID;
     private String title;
 
+    public Department()
+    {
+        
+    }
+    
+    public Department(String departmentID)
+    {
+        this.departmentID = departmentID;
+    }
+    
     public Department(String departmentID, String title) {
         this.departmentID = departmentID;
         this.title = title;
@@ -27,6 +39,18 @@ public class Department {
 
     @Override
     public String toString() {
-        return departmentID + " " + title;
+        if(title == null)
+            return departmentID;
+        else
+            return departmentID + " " + title;
+    }
+    
+    public void set(MySQL attr, Object value)
+    {
+        switch(attr)
+        {
+            case DEPARTMENT_ID: setDepartmentID((String)value); return;
+            case DEPARTMENT_NAME : setTitle((String) value); return;
+        }
     }
 }

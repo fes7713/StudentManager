@@ -22,20 +22,6 @@ public class StudentManager {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // Testing course Entry
-        DepartmentEntry departmentEntry = new DepartmentEntry();
-        Department department = departmentEntry.exec();
-         System.out.println(department);
-         
-        // Testing course Entry
-        CourseEntry courseEntry = new CourseEntry();
-        Course course = courseEntry.exec();
-         System.out.println(course.toFullString());
-       
-         // Testing Student Entry
-        StudentEntry studentEntry = new StudentEntry();
-        Student student = studentEntry.exec();
-        System.out.println(student);
     }
     
     

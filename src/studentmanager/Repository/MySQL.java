@@ -15,17 +15,14 @@ public enum MySQL {
     COURSELIST,
     PROFESSOR,
     DEPARTMENT,
-    
 //    Student Table Attributes
     TU_ID,
     STUDENT_FIRST_NAME,
     STUDENT_LAST_NAME,
     MAJOR,
-    
 //    Department Table Attributes
     DEPARTMENT_ID,
     DEPARTMENT_NAME,
-    
 //    Course Details Table Attributes
     COURSE_ID,
     SEMESTER_TAKEN,
@@ -33,13 +30,11 @@ public enum MySQL {
     END_TIME,
     DAYS,
     COURSE_TITLE,
-    
+    SCHEDULE,
+    YEAR,
+    SEASON,
 //    Professor Table Attributes
     PROFESSOR_ID,
     PROFESSOR_FIRST_NAME,
     PROFESSOR_LAST_NAME,
-    
-    
-    
-    
 }

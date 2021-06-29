@@ -10,14 +10,19 @@ import java.awt.*;
 import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
 import javax.swing.text.NumberFormatter;
+import studentmanager.JavaClasses.Professor;
+import studentmanager.JavaClasses.Semester;
+import studentmanager.Repository.Repository;
 import studentmanager.Repository.TestRepository;
 
-public class StudentEntry{
+public class StudentEntry {
+
     private JButton removeButton;
     private JPanel panel1;
     private JTextField firstNameEntry;
@@ -41,52 +46,52 @@ public class StudentEntry{
     private JLabel majorLabel;
     private JTextField majorEntry;
 
-
     private DefaultListModel<Course> searchCourseModel;
     private DefaultListModel<Course> studentCourseModel;
     private DefaultComboBoxModel<Department> departmentModel;
-    private boolean active;
+    private JFrame frame;
 
     public StudentEntry() {
-        active = true;
-        
+        frame = new JFrame("Student Entry Form");
 //         ok button behavior. by pressing this, window should close (WIP)
         okButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-//                JOptionPane.showMessageDialog(null, "First Name :" + firstNameEntry.getText() + "\n" +
-//                        "Last Name :" + lastNameEntry.getText());
-//                firstNameEntry.setText("");
-//                lastNameEntry.setText("");
-                System.out.println(active);
-                setActive(false);
-                
+                frame.dispose();
+                System.out.println("Ended");
+                java.util.List<Course> courseList = new ArrayList<>();
+                int maxIndex = studentCourseModel.getSize();
+                for (int i = 0; i < maxIndex; i++) {
+                    courseList.add(studentCourseModel.getElementAt(i));
+                }
+
+                Student student = new Student(new Integer(tuidEntry.getValue().toString()), firstNameEntry.getText(), lastNameEntry.getText(), majorEntry.getText(), (Department) departmentCmb.getSelectedItem(), courseList);
+                System.out.println(student);
             }
         });
-        
-        
-        //Department Combobox
+
+        // get data from db
         departmentModel = new DefaultComboBoxModel<>();
-        
-        for(Department d :TestRepository.getDepartments())
-        {
-            departmentModel.addElement(d);
-        }
-        
         departmentCmb.setModel(departmentModel);
-        departmentCmb.setSelectedIndex(0);
-
-        // Course search list
         searchCourseModel = new DefaultListModel<>();
-        
-        for(Course c: TestRepository.getCourses())
-        {
-            searchCourseModel.addElement(c);
-        }
-       
-
         searchCourseList = new JList<>(searchCourseModel);
         searchCoursePane.getViewport().setView(searchCourseList);
+        try {
+
+            for (Department d : Repository.findAllDepartments()) {
+                departmentModel.addElement(d);
+            }
+            departmentCmb.setSelectedIndex(0);
+
+            for (Course c : Repository.findAllCourses()) {
+                searchCourseModel.addElement(c);
+            }
+        } catch (SQLException e) {
+            int errorCode = e.getErrorCode();
+            String errorMessage = e.getMessage();
+            JOptionPane.showMessageDialog(null, "Failed to acquire data from sql\n"
+                    + "Error Code + " + errorCode + " : " + errorMessage);
+        }
 
         // Student course List
         studentCourseModel = new DefaultListModel<>();
@@ -157,7 +162,7 @@ public class StudentEntry{
                 }
             }
         });
-        
+
         // Remove all button behavior
         removeAllButton.addActionListener(new ActionListener() {
             @Override
@@ -172,59 +177,17 @@ public class StudentEntry{
             }
         });
     }
-   
 
     public JPanel getPanel1() {
         return panel1;
     }
-    
-    public boolean isActive()
-    {
-        return active;
-    }
-    
-    public void setActive(boolean active)
-    {
-        this.active = active;
-    }
-    
-    public Student exec()
-    {
-        JFrame frame = new JFrame("Student Database Manager");
+
+    public void exec() {
         frame.setSize(new Dimension(500, 300));
         frame.setContentPane(this.getPanel1());
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
-        while(true)
-        {
-            try {
-             Thread.sleep(10);
-            } catch (InterruptedException e) {
-            }
-            
-            if(!isActive())
-            {
-                if(tuidEntry.getText().isEmpty())
-                {
-                    JOptionPane.showMessageDialog(null, "Empty TU ID is not allowed");
-                    setActive(true);
-                }
-                else{
-                    break;
-                }
-            }
-        }
-        frame.dispose();
-        System.out.println("Ended");
-        java.util.List<Course> courseList = new ArrayList<>();
-        int maxIndex = studentCourseModel.getSize();
-        for(int i = 0; i < maxIndex; i++)
-        {
-            courseList.add(studentCourseModel.getElementAt(i));
-        }
-        
-        return new Student(new Integer(tuidEntry.getValue().toString()), firstNameEntry.getText(), lastNameEntry.getText(), majorEntry.getText(), (Department)departmentCmb.getSelectedItem(), courseList);
     }
 
     {
@@ -235,9 +198,8 @@ public class StudentEntry{
     }
 
     /**
-     * Method generated by IntelliJ IDEA GUI Designer
-     * >>> IMPORTANT!! <<<
-     * DO NOT edit this method OR call it in your code!
+     * Method generated by IntelliJ IDEA GUI Designer >>> IMPORTANT!! <<< DO NOT
+     * edit this method OR call it in your code!
      *
      * @noinspection ALL
      */
@@ -245,7 +207,9 @@ public class StudentEntry{
         panel1 = new JPanel();
         panel1.setLayout(new GridBagLayout());
         Font panel1Font = this.$$$getFont$$$(null, -1, 16, panel1.getFont());
-        if (panel1Font != null) panel1.setFont(panel1Font);
+        if (panel1Font != null) {
+            panel1.setFont(panel1Font);
+        }
         panel1.setRequestFocusEnabled(false);
         lastNameEntry = new JTextField();
         lastNameEntry.setPreferredSize(new Dimension(250, 30));
@@ -323,7 +287,9 @@ public class StudentEntry{
         panel1.add(removeButton, gbc);
         studentCourseLabel = new JLabel();
         Font studentCourseLabelFont = this.$$$getFont$$$(null, -1, 14, studentCourseLabel.getFont());
-        if (studentCourseLabelFont != null) studentCourseLabel.setFont(studentCourseLabelFont);
+        if (studentCourseLabelFont != null) {
+            studentCourseLabel.setFont(studentCourseLabelFont);
+        }
         studentCourseLabel.setHorizontalAlignment(0);
         studentCourseLabel.setHorizontalTextPosition(0);
         studentCourseLabel.setPreferredSize(new Dimension(130, 22));
@@ -337,7 +303,9 @@ public class StudentEntry{
         panel1.add(studentCourseLabel, gbc);
         seachCourseLabel = new JLabel();
         Font seachCourseLabelFont = this.$$$getFont$$$(null, -1, 14, seachCourseLabel.getFont());
-        if (seachCourseLabelFont != null) seachCourseLabel.setFont(seachCourseLabelFont);
+        if (seachCourseLabelFont != null) {
+            seachCourseLabel.setFont(seachCourseLabelFont);
+        }
         seachCourseLabel.setHorizontalAlignment(0);
         seachCourseLabel.setHorizontalTextPosition(0);
         seachCourseLabel.setPreferredSize(new Dimension(130, 22));
@@ -362,7 +330,9 @@ public class StudentEntry{
         panel1.add(searchCoursePane, gbc);
         lastNameLabel = new JLabel();
         Font lastNameLabelFont = this.$$$getFont$$$(null, -1, 14, lastNameLabel.getFont());
-        if (lastNameLabelFont != null) lastNameLabel.setFont(lastNameLabelFont);
+        if (lastNameLabelFont != null) {
+            lastNameLabel.setFont(lastNameLabelFont);
+        }
         lastNameLabel.setText("Last Name");
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
@@ -372,7 +342,9 @@ public class StudentEntry{
         panel1.add(lastNameLabel, gbc);
         firstNameLabel = new JLabel();
         Font firstNameLabelFont = this.$$$getFont$$$(null, -1, 14, firstNameLabel.getFont());
-        if (firstNameLabelFont != null) firstNameLabel.setFont(firstNameLabelFont);
+        if (firstNameLabelFont != null) {
+            firstNameLabel.setFont(firstNameLabelFont);
+        }
         firstNameLabel.setHorizontalAlignment(0);
         firstNameLabel.setHorizontalTextPosition(0);
         firstNameLabel.setText("First Name");
@@ -421,7 +393,7 @@ public class StudentEntry{
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(0, 20, 0, 0);
         panel1.add(okButton, gbc);
-        
+
         // Accept only numbers here
         NumberFormat longFormat = NumberFormat.getIntegerInstance();
         NumberFormatter numberFormatter = new NumberFormatter(longFormat);
@@ -430,7 +402,7 @@ public class StudentEntry{
 //        numberFormatter.setMinimum(0l); //Optional
         tuidEntry = new JFormattedTextField(numberFormatter);
         tuidEntry.setPreferredSize(new Dimension(250, 30));
-        
+
         gbc = new GridBagConstraints();
         gbc.gridx = 2;
         gbc.gridy = 1;
@@ -442,7 +414,9 @@ public class StudentEntry{
         panel1.add(tuidEntry, gbc);
         tuidLabel = new JLabel();
         Font tuidLabelFont = this.$$$getFont$$$(null, -1, 14, tuidLabel.getFont());
-        if (tuidLabelFont != null) tuidLabel.setFont(tuidLabelFont);
+        if (tuidLabelFont != null) {
+            tuidLabel.setFont(tuidLabelFont);
+        }
         tuidLabel.setHorizontalAlignment(0);
         tuidLabel.setHorizontalTextPosition(0);
         tuidLabel.setText("TU ID");
@@ -471,7 +445,9 @@ public class StudentEntry{
         panel1.add(departmentCmb, gbc);
         departmentLabel = new JLabel();
         Font departmentLabelFont = this.$$$getFont$$$(null, -1, 14, departmentLabel.getFont());
-        if (departmentLabelFont != null) departmentLabel.setFont(departmentLabelFont);
+        if (departmentLabelFont != null) {
+            departmentLabel.setFont(departmentLabelFont);
+        }
         departmentLabel.setText("Department");
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
@@ -481,7 +457,9 @@ public class StudentEntry{
         panel1.add(departmentLabel, gbc);
         majorLabel = new JLabel();
         Font majorLabelFont = this.$$$getFont$$$(null, -1, 14, majorLabel.getFont());
-        if (majorLabelFont != null) majorLabel.setFont(majorLabelFont);
+        if (majorLabelFont != null) {
+            majorLabel.setFont(majorLabelFont);
+        }
         majorLabel.setText("Major");
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
@@ -506,7 +484,9 @@ public class StudentEntry{
      * @noinspection ALL
      */
     private Font $$$getFont$$$(String fontName, int style, int size, Font currentFont) {
-        if (currentFont == null) return null;
+        if (currentFont == null) {
+            return null;
+        }
         String resultName;
         if (fontName == null) {
             resultName = currentFont.getName();
@@ -530,7 +510,5 @@ public class StudentEntry{
     public JComponent $$$getRootComponent$$$() {
         return panel1;
     }
-
-    
 
 }

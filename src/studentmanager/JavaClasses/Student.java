@@ -1,6 +1,7 @@
 package studentmanager.JavaClasses;
 
 import java.util.List;
+import studentmanager.Repository.MySQL;
 
 /*
         TU id						Int		Primary key
@@ -19,6 +20,16 @@ public class Student {
     private Department department;
     List<Course> courseTaking;
 
+    public Student()
+    {
+        
+    }
+    
+    public Student (int TU_id)
+    {
+        this.TU_id = TU_id;
+    }
+    
     public Student(int TU_id, String firstName, String lastName, String major, Department department, List<Course> courses) {
         this.TU_id = TU_id;
         this.firstName = firstName;
@@ -81,5 +92,15 @@ public class Student {
         return "Student{" + "TU_id=" + TU_id + ", firstName=" + firstName + ", lastName=" + lastName + ", major=" + major + ", department=" + department + ", courseTaking=" + courseTaking + '}';
     }
     
-    
+    public void set(MySQL attr, Object value)
+    {
+        switch(attr)
+        {
+            case TU_ID : setTU_id((int)value); return;
+            case STUDENT_FIRST_NAME : setFirstName((String) value); return;
+            case STUDENT_LAST_NAME : setLastName((String) value); return;
+            case MAJOR : setMajor((String) value); return;
+            case COURSELIST : setCourseTaking((List<Course>)value); return;
+        }
+    }
 }

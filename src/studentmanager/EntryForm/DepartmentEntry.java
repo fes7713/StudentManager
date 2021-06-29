@@ -8,9 +8,11 @@ package studentmanager.EntryForm;
 import studentmanager.JavaClasses.Department;
 import studentmanager.JavaClasses.Course;
 import java.awt.Dimension;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import studentmanager.Repository.Repository;
 
 /**
  *
@@ -21,48 +23,20 @@ public class DepartmentEntry extends javax.swing.JPanel {
     /**
      * Creates new form DepartmentEntry
      */
-    boolean active;
-    
+    private JFrame frame;
+
     public DepartmentEntry() {
-        active = true;
-        
+        frame = new JFrame("Department Entry Form");
+
         initComponents();
     }
 
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-    
-    public Department exec()
-    {
-        JFrame frame = new JFrame("Department Entry Form");
+    public void exec() {
         frame.setSize(new Dimension(500, 300));
         frame.setContentPane(this);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
-        while(true)
-        {
-            try {
-             Thread.sleep(10);
-            } catch (InterruptedException e) {
-            }
-            
-            if(!isActive())
-            {
-                break;
-            }
-        }
-        frame.dispose();
-        System.out.println("Ended");
-        java.util.List<Course> courseList = new ArrayList<>();
-
-        
-        return new Department(departmentIDEntry.getText(), departmentNameEntry.getText());
     }
 
     /**
@@ -136,7 +110,31 @@ public class DepartmentEntry extends javax.swing.JPanel {
 
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
         // TODO add your handling code here:
-        setActive(false);
+        System.out.println(departmentIDEntry.getText());
+        if (departmentIDEntry.getText().equals("") || departmentNameEntry.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Empty input");
+            return;
+        }
+
+        // Check for duplicate entry
+        try {
+            String id = departmentIDEntry.getText();
+            for (Department dept : Repository.findAllDepartments()) {
+                if(dept.getDepartmentID().equals(id))
+                {
+                    JOptionPane.showMessageDialog(null, "Duplication Entry :" + dept.toString());
+                    return;
+                }
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Connection Error");
+        }
+
+        frame.dispose();
+        System.out.println("Ended");
+        java.util.List<Course> courseList = new ArrayList<>();
+        Department department = new Department(departmentIDEntry.getText(), departmentNameEntry.getText());
+        System.out.println(department);
     }//GEN-LAST:event_okButtonActionPerformed
 
 

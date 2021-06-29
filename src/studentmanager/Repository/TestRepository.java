@@ -69,15 +69,15 @@ public class TestRepository {
         ));
         
         professorList = new ArrayList<>(Arrays.asList(
-                new Professor("Spartak", "Gurgen", departmentList.get(2))));
-                new Professor("Arevig", "Gevorg", departmentList.get(3));
-                new Professor("Gurgen", "Davit", departmentList.get(2));
-                new Professor("Narek", "Ari", departmentList.get(4));
-                new Professor("Linzi", "Clare", departmentList.get(5));
-                new Professor("Jasmyn", "Buster", departmentList.get(1));
-                new Professor("Janella", "Rosamond", departmentList.get(0));
-                new Professor("Harleigh", "Genette", departmentList.get(6));
-                new Professor("Fred", "Thurstan", departmentList.get(0));
+                new Professor(1, "Spartak", "Gurgen", departmentList.get(2))));
+                new Professor(2, "Arevig", "Gevorg", departmentList.get(3));
+                new Professor(3, "Gurgen", "Davit", departmentList.get(2));
+                new Professor(4, "Narek", "Ari", departmentList.get(4));
+                new Professor(5, "Linzi", "Clare", departmentList.get(5));
+                new Professor(6, "Jasmyn", "Buster", departmentList.get(1));
+                new Professor(7, "Janella", "Rosamond", departmentList.get(0));
+                new Professor(8, "Harleigh", "Genette", departmentList.get(6));
+                new Professor(9, "Fred", "Thurstan", departmentList.get(0));
                 
         semesterList = new ArrayList<>(Arrays.asList(
                 new Semester(Season.SPRING, Year.of(2019)),
@@ -156,15 +156,15 @@ public class TestRepository {
     public static List<Professor> getProfessors() {
         Department cisDepartment = new Department("CIS", "Computer & Information Sciences");
         return new ArrayList<>(Arrays.asList(
-                new Professor("Spartak", "Gurgen", cisDepartment),
-                new Professor("Arevig", "Gevorg", cisDepartment),
-                new Professor("Gurgen", "Davit", cisDepartment),
-                new Professor("Narek", "Ari", cisDepartment),
-                new Professor("Linzi", "Clare", cisDepartment),
-                new Professor("Jasmyn", "Buster", cisDepartment),
-                new Professor("Janella", "Rosamond", cisDepartment),
-                new Professor("Harleigh", "Genette", cisDepartment),
-                new Professor("Fred", "Thurstan", cisDepartment)));
+                new Professor(1, "Spartak", "Gurgen", cisDepartment),
+                new Professor(2, "Arevig", "Gevorg", cisDepartment),
+                new Professor(3, "Gurgen", "Davit", cisDepartment),
+                new Professor(4, "Narek", "Ari", cisDepartment),
+                new Professor(5, "Linzi", "Clare", cisDepartment),
+                new Professor(6, "Jasmyn", "Buster", cisDepartment),
+                new Professor(7, "Janella", "Rosamond", cisDepartment),
+                new Professor(8, "Harleigh", "Genette", cisDepartment),
+                new Professor(9, "Fred", "Thurstan", cisDepartment)));
     }
     
     public static List<Semester> getSemesters()

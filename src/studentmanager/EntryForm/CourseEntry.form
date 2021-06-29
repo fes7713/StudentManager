@@ -92,7 +92,6 @@
                               <Component id="semesterAddButton" min="-2" max="-2" attributes="0"/>
                               <Component id="professorAddButton" alignment="1" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="1" max="-2" attributes="0">
@@ -104,15 +103,15 @@
                           <Group type="103" groupAlignment="1" attributes="0">
                               <Group type="102" alignment="1" attributes="0">
                                   <Component id="departmentCmbbox" max="32767" attributes="0"/>
-                                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
                                   <Component id="departmentAddButton" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <Component id="titleEntry" alignment="0" max="32767" attributes="0"/>
                               <Component id="courseNumEntry" max="32767" attributes="0"/>
                           </Group>
-                          <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
                       </Group>
                   </Group>
+                  <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -435,17 +434,17 @@
                                   <Component id="timeStartLabel" min="-2" max="-2" attributes="0"/>
                                   <Component id="timeEndLabel" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace min="-2" pref="38" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" alignment="0" attributes="0">
-                                      <Component id="timeEndAMPM" min="-2" pref="48" max="-2" attributes="0"/>
+                                      <Component id="timeEndAMPM" min="-2" pref="59" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="timeEndHourCmb" min="-2" pref="48" max="-2" attributes="0"/>
                                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                                       <Component id="timeEndMinuteCmb" min="-2" pref="48" max="-2" attributes="0"/>
                                   </Group>
                                   <Group type="102" alignment="0" attributes="0">
-                                      <Component id="timeStartAMPM" min="-2" pref="48" max="-2" attributes="0"/>
+                                      <Component id="timeStartAMPM" min="-2" pref="59" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="timeStartHourCmb" min="-2" pref="48" max="-2" attributes="0"/>
                                       <EmptySpace min="14" pref="14" max="-2" attributes="0"/>
@@ -661,7 +660,7 @@
         <Component class="javax.swing.JFormattedTextField" name="courseNumEntry">
           <Properties>
             <Property name="formatterFactory" type="javax.swing.JFormattedTextField$AbstractFormatterFactory" editor="org.netbeans.modules.form.editors.AbstractFormatterFactoryEditor">
-              <Format subtype="1" type="0"/>
+              <Format format="#0" subtype="-1" type="0"/>
             </Property>
           </Properties>
           <Events>

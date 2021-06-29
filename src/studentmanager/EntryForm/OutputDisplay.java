@@ -5,6 +5,20 @@
  */
 package studentmanager.EntryForm;
 
+import java.awt.event.ItemEvent;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.Vector;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableColumnModel;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import studentmanager.Repository.Repository;
+
 /**
  *
  * @author fes77
@@ -14,8 +28,76 @@ public class OutputDisplay extends javax.swing.JFrame {
     /**
      * Creates new form OutputDisplay
      */
+    DefaultTableColumnModel columnModel;
+    DefaultTableModel tableModel;
+    DefaultComboBoxModel<String> presetModel;
+    String query;
+
     public OutputDisplay() {
+        columnModel = new DefaultTableColumnModel();
+        presetModel = new DefaultComboBoxModel<>();
+
         initComponents();
+        query = "SELECT * FROM Students;";
+        queryEntry.setText(query);
+        updateTable(query);
+        updateTableTree();
+
+        presetModel.addAll(Arrays.asList(new String[]{"All Students", "All Courses", "All Departments", "All Semesters", "All Professors"}));
+        queryPresetCmb.setModel(presetModel);
+    }
+
+    public void updateTable(String query) {
+        try {
+            ResultSet rs = Repository.query(query);
+            ResultSetMetaData rsmd = rs.getMetaData();
+            int nCols = rsmd.getColumnCount();
+
+            Vector<String> colNames = new Vector<>();
+
+            for (int i = 1; i <= nCols; i++) {
+                colNames.add(rsmd.getColumnName(i));
+            }
+
+            tableModel = new DefaultTableModel(colNames, 0);
+            while (rs.next()) {
+                Object[] rowData = new Object[colNames.size()];
+                for (int i = 0; i < rowData.length; i++) {
+                    rowData[i] = rs.getObject(colNames.get(i));
+                }
+                tableModel.addRow(rowData);
+            }
+
+        } catch (SQLException e) {
+            int errorCode = e.getErrorCode();
+            String errorMessage = e.getMessage();
+            JOptionPane.showMessageDialog(null, "Error Code + " + errorCode + " : " + errorMessage);
+            tableModel = new DefaultTableModel(1, 5);
+        }
+
+        outputTable.setModel(tableModel);
+    }
+
+    public void updateTableTree() {
+        DefaultMutableTreeNode root = new DefaultMutableTreeNode(Repository.getDatabaseName());
+        for (String table : Repository.findAllTables()) {
+            DefaultMutableTreeNode tableNode = new DefaultMutableTreeNode(table);
+
+            try {
+                ResultSet rs = Repository.query("SELECT * FROM " + table);
+                ResultSetMetaData rsmd = rs.getMetaData();
+                int nCols = rsmd.getColumnCount();
+
+                for (int i = 1; i <= nCols; i++) {
+                    tableNode.add(new DefaultMutableTreeNode(rsmd.getColumnName(i)));
+                }
+                root.add(tableNode);
+            } catch (Exception e) {
+            }
+        }
+
+        DefaultTreeModel model = new DefaultTreeModel(root);
+        tableTree.setModel(model);
     }
 
     /**
@@ -27,12 +109,53 @@ public class OutputDisplay extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        DML_DDL_ButtonGroup = new javax.swing.ButtonGroup();
+        jMenuBar2 = new javax.swing.JMenuBar();
+        jMenu2 = new javax.swing.JMenu();
+        jMenu4 = new javax.swing.JMenu();
+        jMenu5 = new javax.swing.JMenu();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        outputTable = new javax.swing.JTable();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        queryEntry = new javax.swing.JTextArea();
+        queryPresetCmb = new javax.swing.JComboBox<>();
+        queryPresetLabel = new javax.swing.JLabel();
+        runButton = new javax.swing.JButton();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        tableTree = new javax.swing.JTree();
+        queryEntryLabel = new javax.swing.JLabel();
+        refreshTableButton = new javax.swing.JButton();
+        DMLRadioButton = new javax.swing.JRadioButton();
+        DDLRadioButton = new javax.swing.JRadioButton();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        fileMenu = new javax.swing.JMenu();
+        jMenu3 = new javax.swing.JMenu();
+        editMenu = new javax.swing.JMenu();
+        addMenu = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        courseAddMenuItem = new javax.swing.JMenuItem();
+        departmentAddMenuItem = new javax.swing.JMenuItem();
+        professorAddMenuItem = new javax.swing.JMenuItem();
+        semesterAddMenuItem = new javax.swing.JMenuItem();
+        dropMenu = new javax.swing.JMenu();
+        tableDropMenuItem = new javax.swing.JMenuItem();
+        resetTablesMenuItem = new javax.swing.JMenuItem();
+        sampleDataMenu = new javax.swing.JMenu();
+        createAllMenuItem = new javax.swing.JMenuItem();
+        creatTablesMenuItem = new javax.swing.JMenuItem();
+        sampleDataAddMenuItem = new javax.swing.JMenuItem();
+
+        jMenu2.setText("File");
+        jMenuBar2.add(jMenu2);
+
+        jMenu4.setText("Edit");
+        jMenuBar2.add(jMenu4);
+
+        jMenu5.setText("jMenu5");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        outputTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -43,7 +166,159 @@ public class OutputDisplay extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(outputTable);
+
+        queryEntry.setColumns(20);
+        queryEntry.setRows(5);
+        jScrollPane2.setViewportView(queryEntry);
+
+        queryPresetCmb.setFont(new java.awt.Font("MS UI Gothic", 0, 14)); // NOI18N
+        queryPresetCmb.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        queryPresetCmb.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                queryPresetCmbItemStateChanged(evt);
+            }
+        });
+
+        queryPresetLabel.setFont(new java.awt.Font("MS UI Gothic", 0, 14)); // NOI18N
+        queryPresetLabel.setText("Preset");
+
+        runButton.setFont(new java.awt.Font("MS UI Gothic", 0, 14)); // NOI18N
+        runButton.setText("Run");
+        runButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                runButtonActionPerformed(evt);
+            }
+        });
+
+        jScrollPane3.setViewportView(tableTree);
+
+        queryEntryLabel.setFont(new java.awt.Font("MS UI Gothic", 0, 14)); // NOI18N
+        queryEntryLabel.setText("Query Panel (Write Custome Query Here)");
+
+        refreshTableButton.setText("Refresh");
+        refreshTableButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                refreshTableButtonActionPerformed(evt);
+            }
+        });
+
+        DML_DDL_ButtonGroup.add(DMLRadioButton);
+        DMLRadioButton.setSelected(true);
+        DMLRadioButton.setText("DML");
+        DMLRadioButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                DMLRadioButtonActionPerformed(evt);
+            }
+        });
+
+        DML_DDL_ButtonGroup.add(DDLRadioButton);
+        DDLRadioButton.setText("DDL");
+
+        fileMenu.setText("File");
+
+        jMenu3.setText("jMenu3");
+        fileMenu.add(jMenu3);
+
+        jMenuBar1.add(fileMenu);
+
+        editMenu.setText("Edit");
+
+        addMenu.setText("Add");
+
+        jMenuItem1.setText("Student");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        addMenu.add(jMenuItem1);
+
+        courseAddMenuItem.setText("Course");
+        courseAddMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                courseAddMenuItemActionPerformed(evt);
+            }
+        });
+        addMenu.add(courseAddMenuItem);
+
+        departmentAddMenuItem.setText("Department");
+        departmentAddMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                departmentAddMenuItemActionPerformed(evt);
+            }
+        });
+        addMenu.add(departmentAddMenuItem);
+
+        professorAddMenuItem.setText("Professor");
+        professorAddMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                professorAddMenuItemActionPerformed(evt);
+            }
+        });
+        addMenu.add(professorAddMenuItem);
+
+        semesterAddMenuItem.setText("Semester");
+        semesterAddMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                semesterAddMenuItemActionPerformed(evt);
+            }
+        });
+        addMenu.add(semesterAddMenuItem);
+
+        editMenu.add(addMenu);
+
+        dropMenu.setText("Drop");
+
+        tableDropMenuItem.setText("All Tables");
+        tableDropMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tableDropMenuItemActionPerformed(evt);
+            }
+        });
+        dropMenu.add(tableDropMenuItem);
+
+        resetTablesMenuItem.setText("Reset Tables");
+        resetTablesMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                resetTablesMenuItemActionPerformed(evt);
+            }
+        });
+        dropMenu.add(resetTablesMenuItem);
+
+        editMenu.add(dropMenu);
+
+        jMenuBar1.add(editMenu);
+
+        sampleDataMenu.setText("Sample Data");
+
+        createAllMenuItem.setText("Creat All");
+        createAllMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                createAllMenuItemActionPerformed(evt);
+            }
+        });
+        sampleDataMenu.add(createAllMenuItem);
+
+        creatTablesMenuItem.setText("Creat Tables");
+        creatTablesMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                creatTablesMenuItemActionPerformed(evt);
+            }
+        });
+        sampleDataMenu.add(creatTablesMenuItem);
+
+        sampleDataAddMenuItem.setText("Add Sample Data");
+        sampleDataAddMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sampleDataAddMenuItemActionPerformed(evt);
+            }
+        });
+        sampleDataMenu.add(sampleDataAddMenuItem);
+
+        jMenuBar1.add(sampleDataMenu);
+
+        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -51,19 +326,198 @@ public class OutputDisplay extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(17, Short.MAX_VALUE))
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 496, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(runButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(refreshTableButton))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                            .addComponent(queryPresetLabel)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(queryPresetCmb, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(queryEntryLabel)
+                                .addGap(22, 22, 22)
+                                .addComponent(DMLRadioButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(DDLRadioButton))
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 362, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 555, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(5, 5, 5)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(runButton)
+                            .addComponent(refreshTableButton))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(queryPresetCmb, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(queryPresetLabel))
+                        .addGap(22, 22, 22)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(queryEntryLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(DMLRadioButton)
+                            .addComponent(DDLRadioButton))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScrollPane2))
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void runButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runButtonActionPerformed
+        query = queryEntry.getText();
+        System.out.println(DMLRadioButton.getActionCommand());
+        System.out.println(DML_DDL_ButtonGroup.getSelection().getActionCommand());
+        if (DMLRadioButton.isSelected()) {
+            updateTable(query);
+        } else {
+            try {
+                Repository.SQLDDL(query);
+            } catch (SQLException e) {
+                int errorCode = e.getErrorCode();
+                String errorMessage = e.getMessage();
+                JOptionPane.showMessageDialog(null, "Error Code + " + errorCode + " : " + errorMessage);
+            }
+        }
+
+    }//GEN-LAST:event_runButtonActionPerformed
+
+    private void professorAddMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_professorAddMenuItemActionPerformed
+        new ProfessorEntry().setVisible(true);
+    }//GEN-LAST:event_professorAddMenuItemActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        new StudentEntry().exec();
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void courseAddMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_courseAddMenuItemActionPerformed
+        new CourseEntry().exec();
+//        CourseEntry courseEntry = new CourseEntry();
+//        Course course = courseEntry.exec();
+//        System.out.println(course);
+    }//GEN-LAST:event_courseAddMenuItemActionPerformed
+
+    private void departmentAddMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_departmentAddMenuItemActionPerformed
+        new DepartmentEntry().exec();
+    }//GEN-LAST:event_departmentAddMenuItemActionPerformed
+
+    private void semesterAddMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_semesterAddMenuItemActionPerformed
+        new SemesterEntry().exec();
+    }//GEN-LAST:event_semesterAddMenuItemActionPerformed
+
+    private void queryPresetCmbItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_queryPresetCmbItemStateChanged
+        System.out.println("HE");
+        String item = (String) evt.getItem();
+        if (evt.getStateChange() == ItemEvent.SELECTED) {
+            switch (item) {
+                case "All Students":
+                    query = "SELECT * FROM students";
+                    break;
+                case "All Courses":
+                    query = "SELECT * FROM course_details";
+                    break;
+                case "All Departments":
+                    query = "SELECT * FROM department";
+                    break;
+                case "All Semesters":
+                    query = "SELECT * FROM semesters";
+                    break;
+                case "All Professors":
+                    query = "SELECT * FROM professor_table";
+                    break;
+            }
+            queryEntry.setText(query);
+            System.out.println("HE");
+        }
+
+    }//GEN-LAST:event_queryPresetCmbItemStateChanged
+
+    private void tableDropMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tableDropMenuItemActionPerformed
+        if (JOptionPane.showConfirmDialog(null, "Do you really want to drop all of tables?") == JOptionPane.YES_OPTION) {
+            if (Repository.dropAllTables()) {
+                updateTableTree();
+                JOptionPane.showMessageDialog(null, "Dropped All of Tables successfully");
+            }
+        }
+    }//GEN-LAST:event_tableDropMenuItemActionPerformed
+
+    private void refreshTableButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshTableButtonActionPerformed
+        updateTableTree();
+    }//GEN-LAST:event_refreshTableButtonActionPerformed
+
+    private void DMLRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DMLRadioButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_DMLRadioButtonActionPerformed
+
+    private void resetTablesMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetTablesMenuItemActionPerformed
+        if (JOptionPane.showConfirmDialog(null, "Do you really want to reset all of tables? \n "
+                + "This will alos drop all of data in tables") == JOptionPane.YES_OPTION) {
+            if (Repository.dropAllTables()) {
+                try {
+                    Repository.SQLDDL(Repository.getTableCreationCode());
+                    JOptionPane.showMessageDialog(null, "Dropped All of Tables successfully");
+                } catch (SQLException e) {
+                    int errorCode = e.getErrorCode();
+                    String errorMessage = e.getMessage();
+                    JOptionPane.showMessageDialog(null, "Failed to reset tables\n"
+                            + "Error Code + " + errorCode + " : " + errorMessage);
+                }
+                updateTableTree();
+            }
+        }
+
+    }//GEN-LAST:event_resetTablesMenuItemActionPerformed
+
+    private void createAllMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createAllMenuItemActionPerformed
+        try {
+            Repository.SQLDDL(Repository.getTableCreationCode());
+            Repository.SQLDDL(Repository.getDataInsertionCode());
+            JOptionPane.showMessageDialog(null, "Tables created successfully");
+        } catch (SQLException e) {
+            int errorCode = e.getErrorCode();
+            String errorMessage = e.getMessage();
+            JOptionPane.showMessageDialog(null, "Failed to create tables\n"
+                    + "Error Code + " + errorCode + " : " + errorMessage);
+        }
+    }//GEN-LAST:event_createAllMenuItemActionPerformed
+
+    private void creatTablesMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_creatTablesMenuItemActionPerformed
+        try {
+            Repository.SQLDDL(Repository.getTableCreationCode());
+            JOptionPane.showMessageDialog(null, "Tables created successfully");
+        } catch (SQLException e) {
+            int errorCode = e.getErrorCode();
+            String errorMessage = e.getMessage();
+            JOptionPane.showMessageDialog(null, "Failed to create tables\n"
+                    + "Error Code + " + errorCode + " : " + errorMessage);
+        }
+    }//GEN-LAST:event_creatTablesMenuItemActionPerformed
+
+    private void sampleDataAddMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sampleDataAddMenuItemActionPerformed
+        try {
+            Repository.SQLDDL(Repository.getDataInsertionCode());
+            JOptionPane.showMessageDialog(null, "Data inserted successfully");
+        } catch (SQLException e) {
+            int errorCode = e.getErrorCode();
+            String errorMessage = e.getMessage();
+            JOptionPane.showMessageDialog(null, "Failed to insert data\n"
+                    + "Error Code + " + errorCode + " : " + errorMessage);
+        }
+    }//GEN-LAST:event_sampleDataAddMenuItemActionPerformed
 
     /**
      * @param args the command line arguments
@@ -93,15 +547,51 @@ public class OutputDisplay extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
+        MySQLInitForm connectForm = new MySQLInitForm();
+        connectForm.exac();
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
+
                 new OutputDisplay().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JRadioButton DDLRadioButton;
+    private javax.swing.JRadioButton DMLRadioButton;
+    private javax.swing.ButtonGroup DML_DDL_ButtonGroup;
+    private javax.swing.JMenu addMenu;
+    private javax.swing.JMenuItem courseAddMenuItem;
+    private javax.swing.JMenuItem creatTablesMenuItem;
+    private javax.swing.JMenuItem createAllMenuItem;
+    private javax.swing.JMenuItem departmentAddMenuItem;
+    private javax.swing.JMenu dropMenu;
+    private javax.swing.JMenu editMenu;
+    private javax.swing.JMenu fileMenu;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenu jMenu4;
+    private javax.swing.JMenu jMenu5;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuBar jMenuBar2;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JTable outputTable;
+    private javax.swing.JMenuItem professorAddMenuItem;
+    private javax.swing.JTextArea queryEntry;
+    private javax.swing.JLabel queryEntryLabel;
+    private javax.swing.JComboBox<String> queryPresetCmb;
+    private javax.swing.JLabel queryPresetLabel;
+    private javax.swing.JButton refreshTableButton;
+    private javax.swing.JMenuItem resetTablesMenuItem;
+    private javax.swing.JButton runButton;
+    private javax.swing.JMenuItem sampleDataAddMenuItem;
+    private javax.swing.JMenu sampleDataMenu;
+    private javax.swing.JMenuItem semesterAddMenuItem;
+    private javax.swing.JMenuItem tableDropMenuItem;
+    private javax.swing.JTree tableTree;
     // End of variables declaration//GEN-END:variables
 }

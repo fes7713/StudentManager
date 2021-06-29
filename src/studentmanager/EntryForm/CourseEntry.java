@@ -11,12 +11,11 @@ import studentmanager.JavaClasses.Semester;
 import studentmanager.JavaClasses.Schedule;
 import studentmanager.JavaClasses.Professor;
 import java.awt.*;
+import java.sql.SQLException;
 import java.time.DayOfWeek;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import javax.swing.*;
+import studentmanager.Repository.Repository;
 import studentmanager.Repository.TestRepository;
 
 /**
@@ -31,29 +30,39 @@ public class CourseEntry extends javax.swing.JPanel {
     DefaultComboBoxModel<Professor> professorModel;
     DefaultComboBoxModel<Department> departmentModel;
     DefaultComboBoxModel<Semester> semesterModel;
-    boolean active;
-    
+    JFrame frame;
+
     public CourseEntry() {
-        active = true;
-        
-        departmentModel = new DefaultComboBoxModel<>();
-        for(Department d :TestRepository.getDepartments())
-        {
-            departmentModel.addElement(d);
+        frame = new JFrame("Course Entry");
+
+        if (!Repository.isConnected()) {
+            MySQLInitForm connectForm = new MySQLInitForm();
+            connectForm.exac();
         }
-        
-        professorModel = new DefaultComboBoxModel<>();
-        for(Professor f : TestRepository.getProfessors())
-        {
-            professorModel.addElement(f);
+
+        // get data from db
+        try {
+            departmentModel = new DefaultComboBoxModel<>();
+            for (Department d : Repository.findAllDepartments()) {
+                departmentModel.addElement(d);
+            }
+
+            professorModel = new DefaultComboBoxModel<>();
+            for (Professor f : Repository.findAllProfessors()) {
+                professorModel.addElement(f);
+            }
+
+            semesterModel = new DefaultComboBoxModel<>();
+            for (Semester s : Repository.findAllSemesters()) {
+                semesterModel.addElement(s);
+            }
+        } catch (SQLException e) {
+            int errorCode = e.getErrorCode();
+            String errorMessage = e.getMessage();
+            JOptionPane.showMessageDialog(null, "Failed to acquire data from sql\n"
+                    + "Error Code + " + errorCode + " : " + errorMessage);
         }
-        
-        semesterModel = new DefaultComboBoxModel<>();
-        for(Semester s : TestRepository.getSemesters())
-        {
-            semesterModel.addElement(s);
-        }
-        
+
         initComponents();
     }
 
@@ -61,72 +70,12 @@ public class CourseEntry extends javax.swing.JPanel {
         return mainPanel;
     }
 
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-    
-    public Course exec()
-    {
-        JFrame frame = new JFrame("Course Entry");
+    public void exec() {
         frame.setSize(new Dimension(500, 300));
         frame.setContentPane(this.getMainPanel());
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
-        while(true)
-        {
-
-            try {
-             Thread.sleep(10);
-            } catch (InterruptedException e) {
-            }
-            if(!isActive())
-            {
-                if(courseNumEntry.getText().isEmpty())
-                {
-                    JOptionPane.showMessageDialog(null, "Empty Course Number is not allowed");
-                    setActive(true);
-                }
-                else{
-                    break;
-                }
-                
-            }
-        }
-        frame.dispose();
-        java.util.List<DayOfWeek> days = new ArrayList<>();
-        
-        if(sunRadio.isSelected())
-            days.add(DayOfWeek.SUNDAY);
-        if(monRadio.isSelected())
-            days.add(DayOfWeek.MONDAY);
-        if(tueRadio.isSelected())
-            days.add(DayOfWeek.TUESDAY);
-        if(wedRadio.isSelected())
-            days.add(DayOfWeek.WEDNESDAY);
-        if(thuRadio.isSelected())
-            days.add(DayOfWeek.THURSDAY);
-        if(friRadio.isSelected())
-            days.add(DayOfWeek.FRIDAY);
-        if(satRadio.isSelected())
-            days.add(DayOfWeek.SATURDAY);
-        
-        
-        return new Course((Department)departmentCmbbox.getSelectedItem(), 
-            new Integer(courseNumEntry.getValue().toString()), 
-            titleEntry.getText(),
-            professorCmbbox.getItemAt(professorCmbbox.getSelectedIndex()),
-            semesterCmbbox.getItemAt(semesterCmbbox.getSelectedIndex()),
-            new Schedule(days, (String)timeStartHourCmb.getSelectedItem(), 
-                    (String)timeStartMinuteCmb.getSelectedItem(), 
-                    (String)timeStartAMPM.getSelectedItem(),  
-                    (String)timeEndHourCmb.getSelectedItem(),
-                    (String)timeEndMinuteCmb.getSelectedItem(),
-                    (String)timeEndAMPM.getSelectedItem()));
     }
 
     /**
@@ -418,16 +367,16 @@ public class CourseEntry extends javax.swing.JPanel {
                         .addGroup(timePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(timeStartLabel)
                             .addComponent(timeEndLabel))
-                        .addGap(38, 38, 38)
+                        .addGap(27, 27, 27)
                         .addGroup(timePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(timePanelLayout.createSequentialGroup()
-                                .addComponent(timeEndAMPM, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(timeEndAMPM, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(timeEndHourCmb, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(timeEndMinuteCmb, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(timePanelLayout.createSequentialGroup()
-                                .addComponent(timeStartAMPM, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(timeStartAMPM, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(timeStartHourCmb, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(14, 14, 14)
@@ -456,7 +405,7 @@ public class CourseEntry extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        courseNumEntry.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(java.text.NumberFormat.getIntegerInstance())));
+        courseNumEntry.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
         courseNumEntry.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 courseNumEntryActionPerformed(evt);
@@ -495,8 +444,7 @@ public class CourseEntry extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(semesterAddButton)
-                            .addComponent(professorAddButton, javax.swing.GroupLayout.Alignment.TRAILING))
-                        .addContainerGap())
+                            .addComponent(professorAddButton, javax.swing.GroupLayout.Alignment.TRAILING)))
                     .addGroup(mainPanelLayout.createSequentialGroup()
                         .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(courseNumLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -506,11 +454,11 @@ public class CourseEntry extends javax.swing.JPanel {
                         .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(mainPanelLayout.createSequentialGroup()
                                 .addComponent(departmentCmbbox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGap(9, 9, 9)
                                 .addComponent(departmentAddButton))
                             .addComponent(titleEntry, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(courseNumEntry))
-                        .addGap(12, 12, 12))))
+                            .addComponent(courseNumEntry))))
+                .addContainerGap())
         );
         mainPanelLayout.setVerticalGroup(
             mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -622,19 +570,55 @@ public class CourseEntry extends javax.swing.JPanel {
 
     private void submitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitButtonActionPerformed
         // TODO add your handling code here:
-        setActive(false);
+        java.util.List<DayOfWeek> days = new ArrayList<>();
+
+        if (sunRadio.isSelected()) {
+            days.add(DayOfWeek.SUNDAY);
+        }
+        if (monRadio.isSelected()) {
+            days.add(DayOfWeek.MONDAY);
+        }
+        if (tueRadio.isSelected()) {
+            days.add(DayOfWeek.TUESDAY);
+        }
+        if (wedRadio.isSelected()) {
+            days.add(DayOfWeek.WEDNESDAY);
+        }
+        if (thuRadio.isSelected()) {
+            days.add(DayOfWeek.THURSDAY);
+        }
+        if (friRadio.isSelected()) {
+            days.add(DayOfWeek.FRIDAY);
+        }
+        if (satRadio.isSelected()) {
+            days.add(DayOfWeek.SATURDAY);
+        }
+
+        Course course = new Course((Department) departmentCmbbox.getSelectedItem(),
+                new Integer(courseNumEntry.getValue().toString()),
+                titleEntry.getText(),
+                professorCmbbox.getItemAt(professorCmbbox.getSelectedIndex()),
+                semesterCmbbox.getItemAt(semesterCmbbox.getSelectedIndex()),
+                new Schedule(days, (String) timeStartHourCmb.getSelectedItem(),
+                        (String) timeStartMinuteCmb.getSelectedItem(),
+                        (String) timeStartAMPM.getSelectedItem(),
+                        (String) timeEndHourCmb.getSelectedItem(),
+                        (String) timeEndMinuteCmb.getSelectedItem(),
+                        (String) timeEndAMPM.getSelectedItem()));
+        frame.dispose();
+        System.out.println(course.toFullString());
     }//GEN-LAST:event_submitButtonActionPerformed
 
     private void departmentAddButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_departmentAddButtonActionPerformed
-        // TODO add your handling code here:
+        new DepartmentEntry().exec();
     }//GEN-LAST:event_departmentAddButtonActionPerformed
 
     private void professorAddButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_professorAddButtonActionPerformed
-        // TODO add your handling code here:
+        new ProfessorEntry().setVisible(true);
     }//GEN-LAST:event_professorAddButtonActionPerformed
 
     private void semesterAddButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_semesterAddButtonActionPerformed
-        // TODO add your handling code here:
+        new SemesterEntry().exec();
     }//GEN-LAST:event_semesterAddButtonActionPerformed
 
     private void titleEntryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_titleEntryActionPerformed
