@@ -410,26 +410,4 @@ public class Repository {
             + "\n"
             + "COMMIT;";
 
-    public static void main(String[] args) throws SQLException {
-        MySQL attr = MySQL.COURSE;
-        MySQL attr1 = MySQL.valueOf("Course_ID".toUpperCase());
-        System.out.println(attr1);
-
-        MySQLInitForm connectDBForm = new MySQLInitForm();
-        connectDBForm.exac();
-        List<Course> course = Repository.findCoursesByID(MySQL.PROFESSOR, 456789012);
-        for (int i = 0; i < course.size(); i++) {
-            System.out.println(course.get(i).toString());
-        }
-
-        List<Student> students = Repository.findAllStudents();
-        for (int i = 0; i < students.size(); i++) {
-            System.out.println(students.get(i).toString());
-        }
-
-        List<Department> departments = Repository.findAllDepartments();
-        for (int i = 0; i < departments.size(); i++) {
-            System.out.println(departments.get(i).toString());
-        }
-    }
 }

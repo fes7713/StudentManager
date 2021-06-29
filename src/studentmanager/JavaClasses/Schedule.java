@@ -69,18 +69,4 @@ public class Schedule {
         return "Schedule{" + "days=" + days + ", startTime=" + startTime.format(DateTimeFormatter.ofPattern("KK:mm:ss:a")) + 
                 ", endTime=" + endTime.format(DateTimeFormatter.ofPattern("KK:mm:ss:a")) + '}';
     }
-    
-    public static void main(String[] args)
-    {
-        List<DayOfWeek> days = Arrays.asList(DayOfWeek.TUESDAY);
-        Schedule schedule = new Schedule(days, String.valueOf(11), 
-                    String.valueOf(11),  
-                    "AM",
-                    String.valueOf(11),
-                    String.valueOf(12),
-                    "AM");
-        
-        System.out.println(schedule.toString());
-        System.out.println(schedule.getEndTime());
-    }
 }

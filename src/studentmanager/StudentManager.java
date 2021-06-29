@@ -7,6 +7,8 @@ package studentmanager;
 
 import studentmanager.EntryForm.CourseEntry;
 import studentmanager.EntryForm.DepartmentEntry;
+import studentmanager.EntryForm.MySQLInitForm;
+import studentmanager.EntryForm.OutputDisplay;
 import studentmanager.EntryForm.StudentEntry;
 import studentmanager.JavaClasses.Student;
 import studentmanager.JavaClasses.Department;
@@ -22,6 +24,9 @@ public class StudentManager {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        MySQLInitForm connectForm = new MySQLInitForm();
+        connectForm.exac();
+        new OutputDisplay().setVisible(true);
     }
     
     

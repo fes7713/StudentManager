@@ -96,7 +96,6 @@ public class MySQLInitForm extends javax.swing.JPanel {
         jLabel4.setText("User Name");
 
         tableNameEntry.setFont(new java.awt.Font("MS UI Gothic", 0, 16)); // NOI18N
-        tableNameEntry.setText("practice");
         tableNameEntry.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 tableNameEntryActionPerformed(evt);
@@ -105,8 +104,6 @@ public class MySQLInitForm extends javax.swing.JPanel {
 
         userNameEntry.setFont(new java.awt.Font("MS UI Gothic", 0, 16)); // NOI18N
         userNameEntry.setText("root");
-
-        passwordEntry.setText("20000803");
 
         portNumberEntry.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("#0"))));
         portNumberEntry.setText("3306");
