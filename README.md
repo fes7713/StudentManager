@@ -17,6 +17,6 @@ This application aims to provide a system that enables users to explore the data
 1. Install Java JDK 16 - https://www.oracle.com/java/technologies/javase/jdk16-archive-downloads.html
 2. Install Apatch netbeans - https://netbeans.apache.org/download/nb125/nb125.html
 3. Clone the project and open in Netbeans - 
-  ''' git clone https://github.com/fes7713/StudentManager.git '''
+  ` git clone https://github.com/fes7713/StudentManager.git `
 
 ![Capture 1](https://user-images.githubusercontent.com/71058334/210331324-93e3b6e9-9166-496c-984a-9cce4d12d185.PNG)
