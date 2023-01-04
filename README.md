@@ -7,6 +7,13 @@ This project was a part of a course work in CIS 2109 Database Management course 
 ## Project Abstract
 This application aims to provide a system that enables users to explore the data inside the specific database table in an efficient way. The system is specifically made for the student database system and provides the efficient way to view and manipulate the data inside the student database table.
 
+## Project Goal
+Our goal in this project was to 
+1. Combine Java and MySQL
+2. Create interactive GUI in Java and have an experience developing fully working GUI with external component, MySQL in this project.
+3. Develope the efficient database structure for student management.
+4. Have an Experience working as a team.
+
 # Requirement
 - JDK 16
 - Apatch Netbeans 12.5
@@ -31,5 +38,8 @@ This application aims to provide a system that enables users to explore the data
 2. You will see log-in form for the database access so fill the form by specifying the port number, table name, root name and  password
 ![image](https://user-images.githubusercontent.com/71058334/210542032-cb305250-8cb4-460b-89eb-85fa1d144192.png)
 
+
+# Development
+This application was developed by a team of 7 in two weeks of time along with coursework. The team was divided into two teams to split the work and it was very important for the smooth development of the application. The team 1 was responsible for creating GUI application in Java using Java Swing GUI library.
 
 ![Capture 1](https://user-images.githubusercontent.com/71058334/210331324-93e3b6e9-9166-496c-984a-9cce4d12d185.PNG)
