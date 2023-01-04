@@ -40,6 +40,17 @@ Our goal in this project was to
 
 
 # Development
-This application was developed by a team of 7 in two weeks of time along with coursework. The team was divided into two teams to split the work and it was very important for the smooth development of the application. The team 1 was responsible for creating GUI application in Java using Java Swing GUI library.
-
 ![Capture 1](https://user-images.githubusercontent.com/71058334/210331324-93e3b6e9-9166-496c-984a-9cce4d12d185.PNG)
+This application was developed by a team of 7 in two weeks of time along with coursework. The team was divided into two teams to split the work and it was very important for the smooth development of the application. The team 1 was responsible for creating GUI application in Java using Java Swing GUI library and the team 2 was responsible for creating sql manipulating functions in Java.
+
+## Team 1 - GUI Team.
+- Creating GUI with Java Swing was main responsibility for this team and this task included a bunch of smaller tasks, for example,
+1. Creating Database data entry forms for students, courses and professors.
+2. Creating output GUI view that shows the data inside the specified table.
+
+## Team 2 - MySQL Team.
+- Creating MySQL manipulation funcionss in Java and provide a way to controle MySQL database tables from Java GUI was main responsibilities of this team.
+1. Finding a way to connect MySQL tables from Java using MySQL connector and drivers.
+2. Provide methods to manipulate MySQL tables in Java. (Search, Update, Insert and Delete)
+
+
